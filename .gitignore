@@ -1,0 +1,47 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.out
+*.d
+ctdt.c
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Project Files and makefiles
+.*
+Makefile*
+PPC603GNU
+bin
+bin/*
+bin/*/*
+
+# Backup Files
+*~
+
+# frcmake stuff
+CMakeFiles
+CMakeFiles/*
+CMakeFiles/*/*
+*.cmake
+CMakeCache.txt
+
+# Exception for .gitignores
+!.gitignore
+
+# Eclipse
+2018\ Robot/Debug/
+2018\ Robot/Debug/*
+2018\ Robot/.settings/
+2018\ Robot/.settings/*
+
+# Java
+*/build.properties
+*/build.xml
