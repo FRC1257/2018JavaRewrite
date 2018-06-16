@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveTrain {
 	
+	private static DriveTrain instance = null;
+	
 	private EnhancedTalonSRX frontLeftDrive;
 	private EnhancedTalonSRX frontRightDrive;
 	private EnhancedTalonSRX backLeftDrive;
@@ -21,7 +23,7 @@ public class DriveTrain {
 	
 	private DifferentialDrive driveTrain;
 	
-	public DriveTrain()
+	private DriveTrain()
 	{
 		frontLeftDrive = new EnhancedTalonSRX(Constants.ElectricLayout.DRIVE_FRONT_LEFT);
 		frontRightDrive = new EnhancedTalonSRX(Constants.ElectricLayout.DRIVE_FRONT_RIGHT);
@@ -34,15 +36,21 @@ public class DriveTrain {
 		driveTrain = new DifferentialDrive(leftMotors, rightMotors);
 		
 		configMotors();
-		outputInfo();
+		resetEncoders();
+	}
+	
+	public static DriveTrain getInstance()
+	{
+		if(instance == null) instance = new DriveTrain();
+		return instance;
 	}
 	
 	private void configMotors()
 	{
-		frontLeftDrive.enableCurrentLimit(Constants.FORTY_AMP_FUSE_CONT_MAX);
-		frontRightDrive.enableCurrentLimit(Constants.FORTY_AMP_FUSE_CONT_MAX);
-		backLeftDrive.enableCurrentLimit(Constants.FORTY_AMP_FUSE_CONT_MAX);
-		backRightDrive.enableCurrentLimit(Constants.FORTY_AMP_FUSE_CONT_MAX);
+		frontLeftDrive.enableCurrentLimit(Constants.FORTY_AMP_FUSE_CONT_MAX, Constants.CONT_CURRENT_TIMEOUT_MS);
+		frontRightDrive.enableCurrentLimit(Constants.FORTY_AMP_FUSE_CONT_MAX, Constants.CONT_CURRENT_TIMEOUT_MS);
+		backLeftDrive.enableCurrentLimit(Constants.FORTY_AMP_FUSE_CONT_MAX, Constants.CONT_CURRENT_TIMEOUT_MS);
+		backRightDrive.enableCurrentLimit(Constants.FORTY_AMP_FUSE_CONT_MAX, Constants.CONT_CURRENT_TIMEOUT_MS);
 		
 		frontLeftDrive.configFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, true);
 		frontRightDrive.configFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, true);
@@ -51,6 +59,11 @@ public class DriveTrain {
 	public void arcadeDrive(double forwardSpeed, double turnSpeed)
 	{
 		driveTrain.arcadeDrive(forwardSpeed, turnSpeed);
+	}
+	
+	public void arcadeDrive(double forwardSpeed, double turnSpeed, boolean reducedSpeed)
+	{
+		driveTrain.arcadeDrive(forwardSpeed * Constants.DRIVE_SPEED_REDUCTION, turnSpeed * Constants.DRIVE_SPEED_REDUCTION);
 	}
 	
 	public double getLeftEncoder()
@@ -63,6 +76,16 @@ public class DriveTrain {
 		return frontRightDrive.getSensorValueInches();
 	}
 	
+	public double getLeftEncoderVelocity()
+	{
+		return frontLeftDrive.getSensorVelocityInchesPerSecond();
+	}
+	
+	public double getRightEncoderVelocity()
+	{
+		return frontRightDrive.getSensorVelocityInchesPerSecond();
+	}
+	
 	public void resetEncoders()
 	{
 		frontLeftDrive.zeroSensor();
@@ -71,7 +94,10 @@ public class DriveTrain {
 	
 	public void outputInfo()
 	{
-		EnhancedDashboard.putNumber("Drive Encoder Left", getLeftEncoder());
-		EnhancedDashboard.putNumber("Drive Encoder Right", getRightEncoder());
+		EnhancedDashboard.putNumber("Drive Left Distance", getLeftEncoder());
+		EnhancedDashboard.putNumber("Drive Right Distance", getRightEncoder());
+		
+		EnhancedDashboard.putNumber("Drive Left Velocity", getLeftEncoderVelocity());
+		EnhancedDashboard.putNumber("Drive Right Velocity", getRightEncoderVelocity());
 	}
 }

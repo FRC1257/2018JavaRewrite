@@ -39,7 +39,7 @@ public class EnhancedTalonSRX extends WPI_TalonSRX
 	}
 	
 	//Current Limiting
-	public void enableCurrentLimit(int amps)
+	public void enableCurrentLimit(int amps, int timeoutMs)
 	{
 		configContinuousCurrentLimit(amps, timeoutMs);
 		super.enableCurrentLimit(true);
