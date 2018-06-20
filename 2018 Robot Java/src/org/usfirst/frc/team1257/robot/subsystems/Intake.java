@@ -64,7 +64,7 @@ public class Intake {
 	}
 
 	public void setIntake(double speed) {
-		intakeMotors.set(speed);
+		intakeMotors.set(Constants.deadband(speed));
 	}
 
 	public void outputInfo() {

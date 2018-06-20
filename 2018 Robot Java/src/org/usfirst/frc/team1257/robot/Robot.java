@@ -3,6 +3,7 @@ package org.usfirst.frc.team1257.robot;
 import org.usfirst.frc.team1257.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1257.robot.subsystems.Elevator;
 import org.usfirst.frc.team1257.robot.subsystems.Intake;
+import org.usfirst.frc.team1257.robot.subsystems.Linkage;
 import org.usfirst.frc.team1257.robot.subsystems.Intake.ClawPosition;
 import org.usfirst.frc.team1257.util.SnailController;
 
@@ -13,6 +14,7 @@ public class Robot extends IterativeRobot {
 
 	DriveTrain driveTrain;
 	Elevator elevator;
+	Linkage linkage;
 	Intake intake;
 
 	SnailController driveController;
@@ -22,6 +24,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		driveTrain = DriveTrain.getInstance();
 		elevator = Elevator.getInstance();
+		linkage = Linkage.getInstance();
 		intake = Intake.getInstance();
 
 		driveController = new SnailController(0);
@@ -52,9 +55,12 @@ public class Robot extends IterativeRobot {
 		driveTrain.arcadeDrive(driveController.getForwardSpeed(), driveController.getTurnSpeed());
 
 		// Elevator
-		elevator.set(operatorController.getTriggerAxis(Hand.kRight), operatorController.getTriggerAxis(Hand.kLeft),
+		elevator.setElevator(operatorController.getTriggerAxis(Hand.kRight), operatorController.getTriggerAxis(Hand.kLeft),
 				operatorController.getStartButton());
 
+		// Linkage
+		linkage.setLinkage(operatorController.getY(Hand.kLeft));
+		
 		// Intake Pneumatics
 		if (operatorController.getBumper(Hand.kLeft))
 			intake.setClaw(ClawPosition.CLOSED);

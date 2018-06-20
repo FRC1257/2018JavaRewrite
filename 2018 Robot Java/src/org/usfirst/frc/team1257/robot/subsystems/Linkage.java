@@ -28,7 +28,7 @@ public class Linkage {
 	}
 
 	public void setLinkage(double speed) {
-		linkageMotor.set(speed);
+		linkageMotor.set(Constants.deadband(speed));
 	}
 
 	public void outputInfo() {

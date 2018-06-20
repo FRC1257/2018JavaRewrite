@@ -54,7 +54,7 @@ public class Elevator {
 		return getEncoder() > 12.5;
 	}
 
-	public void set(double raise, double lower, boolean override) {
+	public void setElevator(double raise, double lower, boolean override) {
 		double elevatorSpeed = Constants.deadband(Math.abs(raise)) - Constants.deadband(Math.abs(lower));
 		if (!override)
 			elevatorSpeed = capElevatorOutput(elevatorSpeed);
