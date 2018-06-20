@@ -23,6 +23,9 @@ bin
 bin/*
 bin/*/*
 
+# Exception for .project file
+!.project
+
 # Backup Files
 *~
 
