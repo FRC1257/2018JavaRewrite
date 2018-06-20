@@ -23,8 +23,10 @@ bin
 bin/*
 bin/*/*
 
-# Exception for .project file
+# Exception for Needed Project files
 !.project
+!.classpath
+
 
 # Backup Files
 *~
@@ -44,7 +46,3 @@ CMakeCache.txt
 2018\ Robot/Debug/*
 2018\ Robot/.settings/
 2018\ Robot/.settings/*
-
-# Java
-*/build.properties
-*/build.xml
