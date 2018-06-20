@@ -14,20 +14,20 @@ public class Robot extends IterativeRobot {
 	DriveTrain driveTrain;
 	Elevator elevator;
 	Intake intake;
-	
+
 	SnailController driveController;
 	SnailController operatorController;
-	
+
 	@Override
 	public void robotInit() {
 		driveTrain = DriveTrain.getInstance();
 		elevator = Elevator.getInstance();
 		intake = Intake.getInstance();
-		
+
 		driveController = new SnailController(0);
 		operatorController = new SnailController(1);
-		
-		//Initialize all SmartDashboard values
+
+		// Initialize all SmartDashboard values
 		outputInfo();
 	}
 
@@ -40,36 +40,40 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		outputInfo();
 	}
-	
+
 	@Override
 	public void teleopInit() {
-		
+
 	}
 
 	@Override
 	public void teleopPeriodic() {
-		//Driving
+		// Driving
 		driveTrain.arcadeDrive(driveController.getForwardSpeed(), driveController.getTurnSpeed());
-		
-		//Elevator
+
+		// Elevator
 		elevator.set(operatorController.getTriggerAxis(Hand.kRight), operatorController.getTriggerAxis(Hand.kLeft),
 				operatorController.getStartButton());
-		
-		//Intake Pneumatics
-		if(operatorController.getBumper(Hand.kLeft)) intake.setClaw(ClawPosition.CLOSED);
-		else if(operatorController.getBumper(Hand.kRight)) intake.setClaw(ClawPosition.OPEN);
-		
-		//Intake Wheels
+
+		// Intake Pneumatics
+		if (operatorController.getBumper(Hand.kLeft))
+			intake.setClaw(ClawPosition.CLOSED);
+		else if (operatorController.getBumper(Hand.kRight))
+			intake.setClaw(ClawPosition.OPEN);
+
+		// Intake Wheels
 		double intakeSpeed = Constants.deadband(operatorController.getY(Hand.kRight));
-		if(operatorController.getBButton()) intake.setIntake(Constants.INTAKE_SPEED);
-		else if(operatorController.getAButton()) intake.setIntake(-Constants.INTAKE_SPEED);
-		else intake.setIntake(intakeSpeed);
-		
+		if (operatorController.getBButton())
+			intake.setIntake(Constants.INTAKE_SPEED);
+		else if (operatorController.getAButton())
+			intake.setIntake(-Constants.INTAKE_SPEED);
+		else
+			intake.setIntake(intakeSpeed);
+
 		outputInfo();
 	}
-	
-	private void outputInfo()
-	{
+
+	private void outputInfo() {
 		driveTrain.outputInfo();
 		elevator.outputInfo();
 		intake.outputInfo();

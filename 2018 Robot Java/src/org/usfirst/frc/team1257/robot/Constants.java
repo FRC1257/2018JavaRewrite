@@ -1,36 +1,36 @@
 package org.usfirst.frc.team1257.robot;
 
 public class Constants {
-	
-	public static double deadband(double value)
-	{
+
+	public static double deadband(double value) {
 		return Math.abs(value) < 0.08 ? 0 : value;
 	}
-	
-	public static class ElectricLayout
-	{
+
+	public static class ElectricLayout {
 		public static final int DRIVE_FRONT_LEFT = 0;
 		public static final int DRIVE_FRONT_RIGHT = 1;
 		public static final int DRIVE_BACK_LEFT = 2;
 		public static final int DRIVE_BACK_RIGHT = 3;
-		
+
 		public static final int MOTOR_ELEVATOR_RIGHT = 4;
 		public static final int MOTOR_ELEVATOR_LEFT = 5;
-		
+
 		public static final int MOTOR_INTAKE_RIGHT = 6;
 		public static final int MOTOR_INTAKE_LEFT = 7;
-		
+
+		public static final int MOTOR_LINKAGE = 8;
+
 		public static final int SOLENOID_INTAKE_RIGHT_FORWARD = 0;
 		public static final int SOLENOID_INTAKE_RIGHT_REVERSE = 1;
 
 		public static final int SOLENOID_INTAKE_LEFT_FORWARD = 2;
 		public static final int SOLENOID_INTAKE_LEFT_REVERSE = 3;
 	}
-	
+
 	// Auto Constants
 	public static final double GAME_DATA_TIMEOUT_S = 1;
 	public static final double PID_TIMEOUT_S = 5;
-	
+
 	public static final double DRIVE_SPEED_REDUCTION = 5. / 8.;
 	public static final double ELEVATOR_SPEED_REDUCTION = 1. / 3.;
 
@@ -50,7 +50,7 @@ public class Constants {
 
 	// Intake Constants
 	public static final double INTAKE_SPEED = 0.80;
-	
+
 	// Elevator Constants
 	public static final int ELEVATOR_CONT_CURRENT_MAX = 60;
 	public static final int ELEVATOR_CONT_CURRENT_TIMEOUT_MS = 2000;
