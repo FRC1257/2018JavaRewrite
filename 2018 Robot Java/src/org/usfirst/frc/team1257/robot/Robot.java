@@ -5,6 +5,7 @@ import org.usfirst.frc.team1257.robot.subsystems.Elevator;
 import org.usfirst.frc.team1257.robot.subsystems.Intake;
 import org.usfirst.frc.team1257.robot.subsystems.Linkage;
 import org.usfirst.frc.team1257.robot.subsystems.Intake.ClawPosition;
+import org.usfirst.frc.team1257.util.EnhancedDashboard;
 import org.usfirst.frc.team1257.util.SnailController;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -36,7 +37,8 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void autonomousInit() {
-
+		resetAll();
+		EnhancedDashboard.putString("Auto Status");
 	}
 
 	@Override
@@ -46,7 +48,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
-
+		resetAll();
 	}
 
 	@Override
@@ -82,6 +84,33 @@ public class Robot extends IterativeRobot {
 	private void outputInfo() {
 		driveTrain.outputInfo();
 		elevator.outputInfo();
+		linkage.outputInfo();
 		intake.outputInfo();
+	}
+	
+	private void resetAll()
+	{
+		resetSensors();
+		disablePID();
+		zeroMotors();
+	}
+	
+	private void resetSensors()
+	{
+		driveTrain.resetSensors();
+		elevator.resetEncoder();
+	}
+	
+	private void disablePID()
+	{
+		
+	}
+	
+	private void zeroMotors()
+	{
+		driveTrain.arcadeDrive(0, 0);
+		elevator.setElevator(0, 0, false);
+		linkage.setLinkage(0);
+		intake.setIntake(0);
 	}
 }
