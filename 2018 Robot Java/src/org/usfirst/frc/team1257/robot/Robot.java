@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1257.robot;
 
+import org.usfirst.frc.team1257.robot.auto.Baseline;
 import org.usfirst.frc.team1257.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1257.robot.subsystems.Elevator;
 import org.usfirst.frc.team1257.robot.subsystems.Intake;
@@ -39,6 +40,8 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		resetAll();
 		EnhancedDashboard.putString("Auto Status");
+		
+		Baseline.run(driveTrain, elevator, intake, linkage);
 	}
 
 	@Override
@@ -57,26 +60,29 @@ public class Robot extends IterativeRobot {
 		driveTrain.arcadeDrive(driveController.getForwardSpeed(), driveController.getTurnSpeed());
 
 		// Elevator
-		elevator.setElevator(operatorController.getTriggerAxis(Hand.kRight), operatorController.getTriggerAxis(Hand.kLeft),
-				operatorController.getStartButton());
+		elevator.setElevator(operatorController.getTriggerAxis(Hand.kRight),
+				operatorController.getTriggerAxis(Hand.kLeft), operatorController.getStartButton());
 
 		// Linkage
 		linkage.setLinkage(operatorController.getY(Hand.kLeft));
-		
-		// Intake Pneumatics
-		if (operatorController.getBumper(Hand.kLeft))
-			intake.setClaw(ClawPosition.CLOSED);
-		else if (operatorController.getBumper(Hand.kRight))
-			intake.setClaw(ClawPosition.OPEN);
 
-		// Intake Wheels
-		double intakeSpeed = Constants.deadband(operatorController.getY(Hand.kRight));
-		if (operatorController.getBButton())
+		// Intake
+		if (operatorController.getBumper(Hand.kRight)) {
+			intake.setClaw(ClawPosition.CLOSED);
+		}
+		else if (operatorController.getBumper(Hand.kLeft)) {
 			intake.setIntake(Constants.INTAKE_SPEED);
-		else if (operatorController.getAButton())
+			intake.setClaw(ClawPosition.OPEN);
+		}
+		else if (operatorController.getBButton()) {
+			intake.setIntake(Constants.INTAKE_SPEED);
+		}
+		else if (operatorController.getAButton()) {
 			intake.setIntake(-Constants.INTAKE_SPEED);
-		else
-			intake.setIntake(intakeSpeed);
+		}
+		else {
+			intake.setIntake(Constants.deadband(operatorController.getY(Hand.kRight)));
+		}
 
 		outputInfo();
 	}
@@ -87,27 +93,23 @@ public class Robot extends IterativeRobot {
 		linkage.outputInfo();
 		intake.outputInfo();
 	}
-	
-	private void resetAll()
-	{
+
+	private void resetAll() {
 		resetSensors();
 		disablePID();
 		zeroMotors();
 	}
-	
-	private void resetSensors()
-	{
+
+	private void resetSensors() {
 		driveTrain.resetSensors();
 		elevator.resetEncoder();
 	}
-	
-	private void disablePID()
-	{
-		
+
+	private void disablePID() {
+
 	}
-	
-	private void zeroMotors()
-	{
+
+	private void zeroMotors() {
 		driveTrain.arcadeDrive(0, 0);
 		elevator.setElevator(0, 0, false);
 		linkage.setLinkage(0);

@@ -2,6 +2,7 @@ package org.usfirst.frc.team1257.robot.subsystems;
 
 import org.usfirst.frc.team1257.robot.Constants;
 import org.usfirst.frc.team1257.util.DoubleSolenoidControllerGroup;
+import org.usfirst.frc.team1257.util.EnhancedDashboard;
 import org.usfirst.frc.team1257.util.EnhancedDoubleSolenoid;
 import org.usfirst.frc.team1257.util.EnhancedTalonSRX;
 
@@ -9,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
 
 public class Intake {
 
@@ -51,6 +53,8 @@ public class Intake {
 	private void configMotors() {
 		rightIntakeMotor.setNeutralMode(NeutralMode.Brake);
 		leftIntakeMotor.setNeutralMode(NeutralMode.Brake);
+		
+		leftIntakeMotor.setInverted(true);
 
 		rightIntakeMotor.enableCurrentLimit(Constants.THIRTY_AMP_FUSE_CONT_MAX, Constants.CONT_CURRENT_TIMEOUT_MS);
 		leftIntakeMotor.enableCurrentLimit(Constants.THIRTY_AMP_FUSE_CONT_MAX, Constants.CONT_CURRENT_TIMEOUT_MS);
@@ -65,6 +69,16 @@ public class Intake {
 
 	public void setIntake(double speed) {
 		intakeMotors.set(Constants.deadband(speed));
+	}
+	
+	public void ejectCube()
+	{
+		EnhancedDashboard.putString("Auto Status", "Ejecting Cube");
+		setIntake(-Constants.INTAKE_SPEED);
+		Timer.delay(Constants.INTAKE_EJECT_TIME);
+		setClaw(ClawPosition.OPEN);
+		setIntake(0);
+		EnhancedDashboard.putString("Auto Status", "Ejected Cube");
 	}
 
 	public void outputInfo() {

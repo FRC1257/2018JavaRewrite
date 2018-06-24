@@ -66,6 +66,7 @@ public class Constants {
 
 	// Intake Constants
 	public static final double INTAKE_SPEED = 0.80;
+	public static final double INTAKE_EJECT_TIME = 0.2;
 
 	// Elevator Constants
 	public static final int ELEVATOR_CONT_CURRENT_MAX = 60;

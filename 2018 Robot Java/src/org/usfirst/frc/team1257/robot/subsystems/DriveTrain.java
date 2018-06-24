@@ -102,6 +102,10 @@ public class DriveTrain {
 		driveTrain.arcadeDrive(forwardSpeed * (reducedSpeed ? Constants.DRIVE_SPEED_REDUCTION : 1),
 				turnSpeed * (reducedSpeed ? Constants.DRIVE_SPEED_REDUCTION : 1));
 	}
+	
+	public void driveDistance(double distance) {
+		driveDistance(distance, Constants.PID_TIMEOUT_S);
+	}
 
 	public void driveDistance(double distance, double timeout) {
 		driveDistance(distance, timeout, true);
@@ -215,5 +219,8 @@ public class DriveTrain {
 		EnhancedDashboard.putNumber("Drive Right Velocity", getRightEncoderVelocity());
 
 		EnhancedDashboard.putNumber("Angle", getAngle());
+		
+		EnhancedDashboard.putNumber("Angle PID Setpoint", turnAngleController.getSetpoint());
+		EnhancedDashboard.putNumber("Distance PID Setpoint", distanceController.getSetpoint());
 	}
 }
