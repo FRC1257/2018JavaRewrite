@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1257.robot;
 
 import org.usfirst.frc.team1257.robot.auto.Baseline;
+import org.usfirst.frc.team1257.robot.auto.MiddlePath;
 import org.usfirst.frc.team1257.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1257.robot.subsystems.Elevator;
 import org.usfirst.frc.team1257.robot.subsystems.Intake;
@@ -81,7 +82,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		resetAll();
 		
-		//Grab gameData
+		//Grab Game Data
 		String gameData = waitForGameData();
 		if(gameData.equals("ERROR")) {
 			Baseline.run(driveTrain, elevator, intake, linkage);
@@ -90,7 +91,18 @@ public class Robot extends IterativeRobot {
 		
 		Timer.delay(EnhancedDashboard.getNumber("Auto Delay"));
 	
-		Baseline.run(driveTrain, elevator, intake, linkage);
+		switch(autoLocationChooser.getSelected()) {
+			case LEFT:
+				break;
+			case RIGHT:
+				break;
+			case MIDDLE:
+				MiddlePath.run(gameData.charAt(0), driveTrain, elevator, intake, linkage);
+				break;
+			default:
+				MiddlePath.run(gameData.charAt(0), driveTrain, elevator, intake, linkage);
+				break;
+		}
 	}
 	
 	private String waitForGameData() {
