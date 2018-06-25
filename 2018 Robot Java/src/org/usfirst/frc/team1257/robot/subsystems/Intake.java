@@ -43,7 +43,8 @@ public class Intake {
 
 		configMotors();
 	}
-
+	
+	// Singleton pattern so only one instance is created
 	public static Intake getInstance() {
 		if (instance == null)
 			instance = new Intake();

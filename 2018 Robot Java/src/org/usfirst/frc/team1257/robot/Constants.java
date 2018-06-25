@@ -33,19 +33,31 @@ public class Constants {
 
 	public static final double DRIVE_SPEED_REDUCTION = 5. / 8.;
 	public static final double ELEVATOR_SPEED_REDUCTION = 1. / 3.;
+
+	public static enum AutoPosition {
+		LEFT,
+		MIDDLE,
+		RIGHT
+	}
 	
-	public static class PID
-	{
-		public static final double[] DISTANCE_CONSTANTS = {0.03, 0, 0.06};
-		public static final double[] MAINTAIN_CONSTANTS = {0.04, 0.0, 0.0};
-		public static final double[] TURN_CONSTANTS = {0.04, 0, 0.04};
-		
+	public static enum AutoObjective {
+		SWITCH,
+		SCALE,
+		BASELINE,
+		DEFAULT
+	}
+
+	public static class PID {
+		public static final double[] DISTANCE_CONSTANTS = { 0.03, 0, 0.06 };
+		public static final double[] MAINTAIN_CONSTANTS = { 0.04, 0.0, 0.0 };
+		public static final double[] TURN_CONSTANTS = { 0.04, 0, 0.04 };
+
 		public static final double DISTANCE_ABS_TOL = 3.5;
 		public static final double DISTANCE_OUTPUT_RANGE = 0.7;
-		
+
 		public static final double MAINTAIN_ABS_TOL = 0.5;
 		public static final double MAINTAIN_OUTPUT_RANGE = 1.0;
-		
+
 		public static final double TURN_ABS_TOL = 1;
 		public static final double TURN_OUTPUT_RANGE = 0.3;
 	}

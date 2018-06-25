@@ -16,7 +16,8 @@ public class Linkage {
 
 		configMotors();
 	}
-
+	
+	// Singleton pattern so only one instance is created
 	public static Linkage getInstance() {
 		if (instance == null)
 			instance = new Linkage();

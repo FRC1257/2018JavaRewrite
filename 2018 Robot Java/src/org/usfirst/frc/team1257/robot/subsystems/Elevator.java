@@ -28,6 +28,7 @@ public class Elevator {
 		resetEncoder();
 	}
 
+	// Singleton pattern so only one instance is created
 	public static Elevator getInstance() {
 		if (instance != null)
 			instance = new Elevator();
@@ -56,12 +57,15 @@ public class Elevator {
 
 	public void setElevator(double raise, double lower, boolean override) {
 		double elevatorSpeed = Constants.deadband(Math.abs(raise)) - Constants.deadband(Math.abs(lower));
-		if (!override)
-			elevatorSpeed = capElevatorOutput(elevatorSpeed);
+		if (!override) elevatorSpeed = capElevatorOutput(elevatorSpeed);
 
 		elevatorMotors.set(elevatorSpeed);
 	}
 
+	/* Changes the elevator output depending on the position of the elevator
+	 * If the elevator is at the bottom, don't move the elevator down
+	 * If the elevator is approaching a mechanical stop, slow it down
+	 */
 	private double capElevatorOutput(double output) {
 		double cappedOutput = output;
 		if (output < 0 && getEncoder() <= 0)

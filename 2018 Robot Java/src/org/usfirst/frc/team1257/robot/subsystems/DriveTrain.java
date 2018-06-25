@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class DriveTrain {
 
@@ -50,22 +51,12 @@ public class DriveTrain {
 
 		angleSensorGroup = new AngleSensorGroup(SPI.Port.kMXP, SPI.Port.kOnboardCS0);
 
-		distancePIDHelper = new DistancePIDHelper(this);
-		anglePIDOutput = new AnglePIDOutput(this);
-
-		distanceController = new PIDController(Constants.PID.DISTANCE_CONSTANTS[0], Constants.PID.DISTANCE_CONSTANTS[1],
-				Constants.PID.DISTANCE_CONSTANTS[2], distancePIDHelper, distancePIDHelper);
-		maintainAngleController = new PIDController(Constants.PID.MAINTAIN_CONSTANTS[0],
-				Constants.PID.MAINTAIN_CONSTANTS[1], Constants.PID.MAINTAIN_CONSTANTS[2], angleSensorGroup,
-				anglePIDOutput);
-		turnAngleController = new PIDController(Constants.PID.TURN_CONSTANTS[0], Constants.PID.TURN_CONSTANTS[1],
-				Constants.PID.TURN_CONSTANTS[2], angleSensorGroup, anglePIDOutput);
-
 		configMotors();
 		configPIDControllers();
 		resetSensors();
 	}
 
+	// Singleton pattern so only one instance is created
 	public static DriveTrain getInstance() {
 		if (instance == null)
 			instance = new DriveTrain();
@@ -83,6 +74,17 @@ public class DriveTrain {
 	}
 
 	private void configPIDControllers() {
+		distancePIDHelper = new DistancePIDHelper(this);
+		anglePIDOutput = new AnglePIDOutput(this);
+
+		distanceController = new PIDController(Constants.PID.DISTANCE_CONSTANTS[0], Constants.PID.DISTANCE_CONSTANTS[1],
+				Constants.PID.DISTANCE_CONSTANTS[2], distancePIDHelper, distancePIDHelper);
+		maintainAngleController = new PIDController(Constants.PID.MAINTAIN_CONSTANTS[0],
+				Constants.PID.MAINTAIN_CONSTANTS[1], Constants.PID.MAINTAIN_CONSTANTS[2], angleSensorGroup,
+				anglePIDOutput);
+		turnAngleController = new PIDController(Constants.PID.TURN_CONSTANTS[0], Constants.PID.TURN_CONSTANTS[1],
+				Constants.PID.TURN_CONSTANTS[2], angleSensorGroup, anglePIDOutput);
+		
 		distanceController.setAbsoluteTolerance(Constants.PID.DISTANCE_ABS_TOL);
 		distanceController.setOutputRange(-Constants.PID.DISTANCE_OUTPUT_RANGE, Constants.PID.DISTANCE_OUTPUT_RANGE);
 
@@ -92,12 +94,20 @@ public class DriveTrain {
 
 		turnAngleController.setAbsoluteTolerance(Constants.PID.TURN_ABS_TOL);
 		turnAngleController.setOutputRange(-Constants.PID.TURN_OUTPUT_RANGE, Constants.PID.TURN_OUTPUT_RANGE);
+	
+		// Add all PID Controllers to LiveWindow for configuration
+		LiveWindow.add(distanceController);
+		LiveWindow.add(maintainAngleController);
+		LiveWindow.add(turnAngleController);
 	}
 
 	public void arcadeDrive(double forwardSpeed, double turnSpeed) {
 		driveTrain.arcadeDrive(forwardSpeed, turnSpeed, false);
 	}
 
+	/* Drives forward at the forward speed and turns around its center at the turn speed
+	 * If reducedSpeed is true, the drive train will drive at a slower speed
+	 */
 	public void arcadeDrive(double forwardSpeed, double turnSpeed, boolean reducedSpeed) {
 		driveTrain.arcadeDrive(forwardSpeed * (reducedSpeed ? Constants.DRIVE_SPEED_REDUCTION : 1),
 				turnSpeed * (reducedSpeed ? Constants.DRIVE_SPEED_REDUCTION : 1));
@@ -111,10 +121,17 @@ public class DriveTrain {
 		driveDistance(distance, timeout, true);
 	}
 
+	public void driveDistance(double distance, boolean reset) {
+		driveDistance(distance, Constants.PID_TIMEOUT_S, reset);
+	}
+
+	/* Drives a certain distance in a straight line
+	 * If the timeout is gone over, the command will stop
+	 * If reset is true, the drive encoders will be reset before driving
+	 */
 	public void driveDistance(double distance, double timeout, boolean reset) {
 		EnhancedDashboard.putString("Auto Status", "Driving " + distance + " inches");
-		if (reset)
-			resetEncoders();
+		if (reset) resetEncoders();
 		angleSensorGroup.reset();
 		turnAngleController.disable();
 
@@ -134,11 +151,23 @@ public class DriveTrain {
 
 		EnhancedDashboard.putString("Auto Status", "Drive Complete");
 	}
+	
+	public void turnAngle(double angle) {
+		turnAngle(angle, Constants.PID_TIMEOUT_S);
+	}
 
 	public void turnAngle(double angle, double timeout) {
 		turnAngle(angle, timeout, true);
 	}
+	
+	public void turnAngle(double angle, boolean reset) {
+		turnAngle(angle, Constants.PID_TIMEOUT_S, reset);
+	}
 
+	/* Rotates to a certain angle
+	 * If the timeout is gone over, the command will stop
+	 * If reset is true, the angle sensor will be reset before driving
+	 */
 	public void turnAngle(double angle, double timeout, boolean reset) {
 		EnhancedDashboard.putString("Auto Status", "Turning " + angle + " degrees");
 		if (reset) resetAngle();
@@ -158,6 +187,7 @@ public class DriveTrain {
 		EnhancedDashboard.putString("Auto Status", "Turn Complete");
 	}
 
+	// Pauses robot execution until the PIDController finishes or the timeout is gone over
 	public void waitUntilPIDSteady(PIDController controller, double timeout) {
 		Timer pidTimer = new Timer();
 		pidTimer.start();
@@ -170,6 +200,7 @@ public class DriveTrain {
 		controller.disable();
 	}
 	
+	// Time-based robot drive
 	public void driveFor(double seconds, double speed)
 	{
 		arcadeDrive(speed, 0);
@@ -209,6 +240,12 @@ public class DriveTrain {
 
 	public void resetAngle() {
 		angleSensorGroup.reset();
+	}
+	
+	public void disablePID() {
+		distanceController.disable();
+		maintainAngleController.disable();
+		turnAngleController.disable();
 	}
 
 	public void outputInfo() {
