@@ -27,7 +27,6 @@ bin/*/*
 !.project
 !.classpath
 
-
 # Backup Files
 *~
 
@@ -42,7 +41,11 @@ CMakeCache.txt
 !.gitignore
 
 # Eclipse
-2018\ Robot/Debug/
-2018\ Robot/Debug/*
-2018\ Robot/.settings/
-2018\ Robot/.settings/*
+*/Debug/
+*/Debug/*
+*/.settings/
+*/.settings/*
+
+# Java
+*/build/*
+*/dist/*
