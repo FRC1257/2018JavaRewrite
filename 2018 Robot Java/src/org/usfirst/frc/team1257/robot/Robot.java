@@ -1,12 +1,8 @@
 package org.usfirst.frc.team1257.robot;
 
-import org.usfirst.frc.team1257.robot.auto.Baseline;
-import org.usfirst.frc.team1257.robot.auto.MiddlePath;
-import org.usfirst.frc.team1257.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team1257.robot.subsystems.Elevator;
-import org.usfirst.frc.team1257.robot.subsystems.Intake;
+import org.usfirst.frc.team1257.robot.auto.*;
+import org.usfirst.frc.team1257.robot.subsystems.*;
 import org.usfirst.frc.team1257.robot.subsystems.Intake.ClawPosition;
-import org.usfirst.frc.team1257.robot.subsystems.Linkage;
 import org.usfirst.frc.team1257.util.EnhancedDashboard;
 import org.usfirst.frc.team1257.util.SnailController;
 
@@ -28,7 +24,7 @@ public class Robot extends IterativeRobot {
 	SnailController driveController;
 	SnailController operatorController;
 	
-	SendableChooser<Constants.AutoPosition> autoLocationChooser;
+	SendableChooser<Constants.AutoPosition> autoPositionChooser;
 	SendableChooser<Constants.AutoObjective> autoObjectiveChooser;
 
 	@Override
@@ -48,7 +44,7 @@ public class Robot extends IterativeRobot {
 		EnhancedDashboard.putString("Auto Status");
 		EnhancedDashboard.putNumber("Auto Delay");
 		
-		//Configure camera stream in a separate thread
+		// Configure camera stream in a separate thread
 		new Thread(() ->  {
 			try {
 				AxisCamera camera = CameraServer.getInstance().addAxisCamera("10.12.57.11");
@@ -62,19 +58,19 @@ public class Robot extends IterativeRobot {
 	
 	// Configures the SendableChoosers for selecting auto paths
 	private void configAutoChoosers() {
-		autoLocationChooser = new SendableChooser<Constants.AutoPosition>();
+		autoPositionChooser = new SendableChooser<Constants.AutoPosition>();
 		autoObjectiveChooser = new SendableChooser<Constants.AutoObjective>();
 
-		autoLocationChooser.addObject("Left Start", Constants.AutoPosition.LEFT);
-		autoLocationChooser.addDefault("Middle Start", Constants.AutoPosition.MIDDLE);
-		autoLocationChooser.addObject("Right Start", Constants.AutoPosition.RIGHT);
+		autoPositionChooser.addObject("Left Start", Constants.AutoPosition.LEFT);
+		autoPositionChooser.addDefault("Middle Start", Constants.AutoPosition.MIDDLE);
+		autoPositionChooser.addObject("Right Start", Constants.AutoPosition.RIGHT);
 		
 		autoObjectiveChooser.addDefault("Default", Constants.AutoObjective.DEFAULT);
 		autoObjectiveChooser.addObject("Switch", Constants.AutoObjective.SWITCH);
 		autoObjectiveChooser.addObject("Scale", Constants.AutoObjective.SCALE);
 		autoObjectiveChooser.addObject("Baseline", Constants.AutoObjective.BASELINE);
 
-		EnhancedDashboard.putData(autoLocationChooser);
+		EnhancedDashboard.putData(autoPositionChooser);
 		EnhancedDashboard.putData(autoObjectiveChooser);
 	}
 
@@ -91,17 +87,35 @@ public class Robot extends IterativeRobot {
 		
 		Timer.delay(EnhancedDashboard.getNumber("Auto Delay"));
 	
-		switch(autoLocationChooser.getSelected()) {
-			case LEFT:
-				break;
-			case RIGHT:
-				break;
-			case MIDDLE:
-				MiddlePath.run(gameData.charAt(0), driveTrain, elevator, intake, linkage);
-				break;
-			default:
-				MiddlePath.run(gameData.charAt(0), driveTrain, elevator, intake, linkage);
-				break;
+		Constants.AutoPosition position = autoPositionChooser.getSelected();
+
+		char switchPosition = gameData.charAt(0);
+		char scalePosition = gameData.charAt(1);
+		
+		// Side Position
+		if(position == Constants.AutoPosition.LEFT || position == Constants.AutoPosition.RIGHT) {
+			char startPosition = position == Constants.AutoPosition.LEFT ? 'L' : 'R';
+			
+			switch(autoObjectiveChooser.getSelected()) {
+				case SWITCH:
+					SideSwitch.run(startPosition, switchPosition, driveTrain, elevator, intake, linkage);
+					break;
+				case SCALE:
+					Scale.run(startPosition, scalePosition, driveTrain, elevator, intake, linkage);
+					break;
+				case BASELINE:
+					Baseline.run(driveTrain, elevator, intake, linkage);
+					break;
+				case DEFAULT: // Purposely fall through into default case
+				default:
+					DefaultPath.run(startPosition, switchPosition, scalePosition, 
+							driveTrain, elevator, intake, linkage);
+					break;
+			}
+		}
+		// Middle Position
+		else {
+			MiddlePath.run(gameData.charAt(0), driveTrain, elevator, intake, linkage);
 		}
 	}
 	
@@ -147,22 +161,18 @@ public class Robot extends IterativeRobot {
 		linkage.setLinkage(operatorController.getY(Hand.kLeft));
 
 		// Intake
-		if (operatorController.getBumper(Hand.kRight)) {
+		if (operatorController.getBumper(Hand.kRight))
 			intake.setClaw(ClawPosition.CLOSED);
-		}
 		else if (operatorController.getBumper(Hand.kLeft)) {
 			intake.setIntake(Constants.INTAKE_SPEED);
 			intake.setClaw(ClawPosition.OPEN);
 		}
-		else if (operatorController.getBButton()) {
+		else if (operatorController.getBButton())
 			intake.setIntake(Constants.INTAKE_SPEED);
-		}
-		else if (operatorController.getAButton()) {
+		else if (operatorController.getAButton())
 			intake.setIntake(-Constants.INTAKE_SPEED);
-		}
-		else {
+		else
 			intake.setIntake(Constants.deadband(operatorController.getY(Hand.kRight)));
-		}
 
 		outputInfo();
 	}
