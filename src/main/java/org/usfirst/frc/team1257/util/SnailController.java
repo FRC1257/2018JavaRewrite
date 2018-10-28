@@ -14,7 +14,7 @@ public class SnailController extends XboxController {
 	}
 
 	/*
-	 * Controls If they press A, use single stick arcade with the left joystick
+	 * Controls: If they press A, use single stick arcade with the left joystick
 	 * 
 	 * If they press the left bumper, use the left joystick for forward and backward
 	 * motion and the right joystick for turning
@@ -22,6 +22,7 @@ public class SnailController extends XboxController {
 	 * If they press the right bumper, use the right joystick for forward and
 	 * backward motion and the left joystick for turning
 	 */
+	
 	public double getForwardSpeed() {
 		if (getAButton())
 			return getY(Hand.kLeft);
