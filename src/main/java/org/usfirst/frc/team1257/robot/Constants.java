@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1257.robot;
 
+// This is our reference sheet
+
 public class Constants {
 
 	public static double deadband(double value) {

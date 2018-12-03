@@ -2,6 +2,8 @@ package org.usfirst.frc.team1257.util;
 
 import edu.wpi.first.wpilibj.XboxController;
 
+// Xbox controller optimized for our drive team.
+
 public class SnailController extends XboxController {
 
 	public SnailController(int port) {

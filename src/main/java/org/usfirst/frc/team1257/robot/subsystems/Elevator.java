@@ -13,8 +13,12 @@ public class Elevator {
 
 	private static Elevator instance = null;
 
+	// Define motors used for the elevator
+
 	private EnhancedTalonSRX rightElevatorMotor;
 	private EnhancedTalonSRX leftElevatorMotor;
+
+	// Control two motors with one SpeedControllerGroup
 
 	private SpeedControllerGroup elevatorMotors;
 
@@ -54,6 +58,8 @@ public class Elevator {
 	public boolean isElevatorHigh() {
 		return getEncoder() > 12.5;
 	}
+
+	// Raise and lower the elevator
 
 	public void setElevator(double raise, double lower, boolean override) {
 		double elevatorSpeed = Constants.deadband(Math.abs(raise)) - Constants.deadband(Math.abs(lower));

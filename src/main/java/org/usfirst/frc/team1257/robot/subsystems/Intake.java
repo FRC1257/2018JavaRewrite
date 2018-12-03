@@ -14,11 +14,16 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class Intake {
 
+	// If the claw is CLOSED: chances are, we have a cube in it.
+	// If the claw is OPEN: chances are, we're looking for a cube.
+
 	public static enum ClawPosition {
 		CLOSED, OPEN
 	}
 
 	private static Intake instance = null;
+
+	// More definintions of motors
 
 	private EnhancedTalonSRX rightIntakeMotor;
 	private EnhancedTalonSRX leftIntakeMotor;

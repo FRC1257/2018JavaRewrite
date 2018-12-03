@@ -16,21 +16,34 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
+// This is important. This makes the robot drive. That is very important.
+// Again: if this code is wrong our robot will not drive properly.
+
 public class DriveTrain {
 
 	private static DriveTrain instance = null;
+
+	// Defining motors for driving.
 
 	private EnhancedTalonSRX frontLeftDrive;
 	private EnhancedTalonSRX frontRightDrive;
 	private EnhancedTalonSRX backLeftDrive;
 	private EnhancedTalonSRX backRightDrive;
 
+	// Separating the motors into left and right. 
+	// Also, DifferentialDrive can only take in two inputs.
+
 	private SpeedControllerGroup leftMotors;
 	private SpeedControllerGroup rightMotors;
 
 	private DifferentialDrive driveTrain;
 
+	// Determining the direction we drive at.
+
 	private AngleSensorGroup angleSensorGroup;
+
+	// This is PID stuff. 
+	// PID helps us move precisely.
 
 	private PIDController distanceController;
 	private PIDController maintainAngleController;
@@ -39,10 +52,14 @@ public class DriveTrain {
 	private AnglePIDOutput anglePIDOutput;
 
 	private DriveTrain() {
+		// Defining the motors
+
 		frontLeftDrive = new EnhancedTalonSRX(Constants.ElectricLayout.DRIVE_FRONT_LEFT);
 		frontRightDrive = new EnhancedTalonSRX(Constants.ElectricLayout.DRIVE_FRONT_RIGHT);
 		backLeftDrive = new EnhancedTalonSRX(Constants.ElectricLayout.DRIVE_BACK_LEFT);
 		backRightDrive = new EnhancedTalonSRX(Constants.ElectricLayout.DRIVE_BACK_RIGHT);
+
+		// And the SpeedControllerGroups
 
 		leftMotors = new SpeedControllerGroup(frontLeftDrive, backLeftDrive);
 		rightMotors = new SpeedControllerGroup(frontRightDrive, backRightDrive);

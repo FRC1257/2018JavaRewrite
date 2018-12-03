@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SPI;
 
+// Returns the angle we're driving at. Motion is a vector quantity.
+
 public class AngleSensorGroup implements PIDSource {
 	private AHRS m_NavX;
 	private ADXRS450_Gyro m_Gyro;

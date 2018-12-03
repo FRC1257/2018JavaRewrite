@@ -9,6 +9,8 @@ public class Linkage {
 
 	private static Linkage instance = null;
 
+	// Allocate a motor for the linkage
+
 	private EnhancedTalonSRX linkageMotor;
 
 	private Linkage() {

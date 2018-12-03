@@ -1,3 +1,5 @@
+// Importing all the packages required
+
 package org.usfirst.frc.team1257.robot;
 
 import org.usfirst.frc.team1257.robot.auto.*;
@@ -14,12 +16,26 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
+// Public class Robot is like public statis void Main in Java or int main in C++.
+// Virtually all of our robot code is in this class.
+
 public class Robot extends IterativeRobot {
+
+	// We define a lot of stuff in here.
+
+	// DriveTrain is the object we use to drive the robot.
+	// Elevator is the object we use to raise and lower the claws.
+	// Linkage is the object we use to rotate the claws.
+	// Intake is the object we use to take cubes inand out.
 
 	DriveTrain driveTrain;
 	Elevator elevator;
 	Linkage linkage;
 	Intake intake;
+
+	// These controllers all extend an Xbox controller.
+	// In other words, this is for the drive team.
+	// They can now control the robot using an Xbox controller.
 
 	SnailController driveController;
 	SnailController operatorController;
@@ -29,6 +45,9 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void robotInit() {
+
+		// Reset objects. All of them.
+
 		driveTrain = DriveTrain.getInstance();
 		elevator = Elevator.getInstance();
 		linkage = Linkage.getInstance();
@@ -36,6 +55,9 @@ public class Robot extends IterativeRobot {
 
 		driveController = new SnailController(0);
 		operatorController = new SnailController(1);
+
+		// Auto has multiple permutations. 
+		// This function helps ensure that we're running the correct one.
 		
 		configAutoChoosers();
 		
@@ -74,6 +96,7 @@ public class Robot extends IterativeRobot {
 		EnhancedDashboard.putData(autoObjectiveChooser);
 	}
 
+	// This is the code we run in autonomous.
 	@Override
 	public void autonomousInit() {
 		resetAll();
@@ -91,7 +114,8 @@ public class Robot extends IterativeRobot {
 
 		char switchPosition = gameData.charAt(0);
 		char scalePosition = gameData.charAt(1);
-		
+
+		// Run different variations of the same code based on the autonomous permutations.
 		// Side Position
 		if(position == Constants.AutoPosition.LEFT || position == Constants.AutoPosition.RIGHT) {
 			char startPosition = position == Constants.AutoPosition.LEFT ? 'L' : 'R';
@@ -145,6 +169,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopInit() {
+		// We don't want autonomous code running during teleoperated.
 		resetAll();
 	}
 
