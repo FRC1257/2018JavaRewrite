@@ -17,7 +17,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 // Public class Robot is like public statis void Main in Java or int main in C++.
-// Virtually all of our robot code is in this class.
+// Virtually all of our actions are done in this class.
+// However, most of the methods we use in this class are from other files in the same project.
 
 public class Robot extends IterativeRobot {
 
