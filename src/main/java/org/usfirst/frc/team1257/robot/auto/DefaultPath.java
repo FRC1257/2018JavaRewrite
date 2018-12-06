@@ -6,6 +6,8 @@ import org.usfirst.frc.team1257.robot.subsystems.Intake;
 import org.usfirst.frc.team1257.robot.subsystems.Linkage;
 import org.usfirst.frc.team1257.util.EnhancedDashboard;
 
+// See SideSwitch.java for more info.
+
 public class DefaultPath {
 	public static void run(char startPosition, char switchPosition, char scalePosition, 
 			DriveTrain driveTrain, Elevator elevator, Intake intake, Linkage linkage) {

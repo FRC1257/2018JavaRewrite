@@ -5,6 +5,9 @@ import org.usfirst.frc.team1257.util.EnhancedDashboard;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 
+// This is PID. 
+// PID helps us run precisely.
+
 public class AnglePIDOutput implements PIDOutput {
 	
 	private DriveTrain driveTrain;

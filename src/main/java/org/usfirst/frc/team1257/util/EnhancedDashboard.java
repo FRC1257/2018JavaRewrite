@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+// Dashboard is what the drive team sees on their console
+
 public class EnhancedDashboard extends SmartDashboard {
 	private static Map<String, Runnable> buttons = new HashMap<>();
 

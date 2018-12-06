@@ -66,6 +66,7 @@ public class Intake {
 		leftIntakeMotor.enableCurrentLimit(Constants.THIRTY_AMP_FUSE_CONT_MAX, Constants.CONT_CURRENT_TIMEOUT_MS);
 	}
 
+	// Makes the claw open or close
 	public void setClaw(ClawPosition position) {
 		if (position == ClawPosition.CLOSED)
 			solenoidMotors.set(Value.kForward);
@@ -73,6 +74,7 @@ public class Intake {
 			solenoidMotors.set(Value.kReverse);
 	}
 
+	// Makes the intake motors move
 	public void setIntake(double speed) {
 		intakeMotors.set(Constants.deadband(speed));
 	}

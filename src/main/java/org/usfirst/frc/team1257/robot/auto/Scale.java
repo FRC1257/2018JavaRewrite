@@ -14,6 +14,8 @@ public class Scale {
 		double angle = startPosition == 'L' ? 90 : -90;
 		
 		if(startPosition == scalePosition) {
+			// Drives 257 feet, turns, then drives 10 feet
+			
 			driveTrain.driveDistance(257);
 			driveTrain.turnAngle(angle / 2.0);
 			

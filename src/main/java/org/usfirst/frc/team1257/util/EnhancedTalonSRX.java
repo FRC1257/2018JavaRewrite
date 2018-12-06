@@ -8,6 +8,9 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+// This is a motor class.
+// We used Talons in 2018.
+
 public class EnhancedTalonSRX extends WPI_TalonSRX {
 	private int timeoutMs = 10;
 	private int pidLoopId = 0;

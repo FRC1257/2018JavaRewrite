@@ -152,6 +152,8 @@ public class DriveTrain {
 		angleSensorGroup.reset();
 		turnAngleController.disable();
 
+		// Set PID values
+
 		distancePIDHelper.setAnglePIDOutput(anglePIDOutput);
 		anglePIDOutput.setDistancePIDHelper(distancePIDHelper);
 
@@ -160,6 +162,8 @@ public class DriveTrain {
 
 		distanceController.reset();
 		distanceController.setSetpoint(distance);
+
+		// Drive according to the PID control loop
 
 		maintainAngleController.enable();
 		distanceController.enable();
@@ -191,11 +195,15 @@ public class DriveTrain {
 		distanceController.disable();
 		maintainAngleController.disable();
 
+		// Invoking PID sorcery
+
 		distancePIDHelper.setAnglePIDOutput(null);
 		anglePIDOutput.setDistancePIDHelper(null);
 
 		turnAngleController.reset();
 		turnAngleController.setSetpoint(angle);
+
+		// The below line is what makes this actually turn
 
 		turnAngleController.enable();
 
