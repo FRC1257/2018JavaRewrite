@@ -90,6 +90,14 @@ public class DriveTrain {
 		frontRightDrive.configFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, true);
 	}
 
+	// Declares thePIDControllers
+	// If you don't know what a PIDController does:
+	// It returns an output given a setpoint and a current point
+	// error = setpoint - current point
+	// output = P*error + I*error*time + D*error 
+	// P = constant of proportionality
+	// I = constant of integration (not that one)
+	// D = constant of differentiation
 	private void configPIDControllers() {
 		distancePIDHelper = new DistancePIDHelper(this);
 		anglePIDOutput = new AnglePIDOutput(this);
@@ -164,9 +172,15 @@ public class DriveTrain {
 		distanceController.setSetpoint(distance);
 
 		// Drive according to the PID control loop
+		// Alright, what happens when these are enabled:
+		// The robot will drive according to the control loops
+		// specified in confidPIDControllers
+		// The controllers will calculate the output and drive according to that
 
 		maintainAngleController.enable();
 		distanceController.enable();
+
+		// And then they'll stop
 
 		waitUntilPIDSteady(distanceController, timeout);
 
@@ -189,6 +203,7 @@ public class DriveTrain {
 	 * If the timeout is gone over, the command will stop
 	 * If reset is true, the angle sensor will be reset before driving
 	 */
+	// Look at driveDistance for more documentation
 	public void turnAngle(double angle, double timeout, boolean reset) {
 		EnhancedDashboard.putString("Auto Status", "Turning " + angle + " degrees");
 		if (reset) resetAngle();

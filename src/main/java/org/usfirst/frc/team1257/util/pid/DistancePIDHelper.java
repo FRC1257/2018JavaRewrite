@@ -20,12 +20,16 @@ public class DistancePIDHelper implements PIDSource, PIDOutput {
 		this.anglePIDOutput = null;
 	}
 
+	// Similar to the stuff in AnglePIDOutput
+	// Honestly, just look at that one
 	@Override
 	public void pidWrite(double output) {
 		EnhancedDashboard.putNumber("Distance PID Output", output);
 		
 		double turn = anglePIDOutput == null ? 0 : anglePIDOutput.getPrevOutput();
 		driveTrain.arcadeDrive(output, turn, false);
+
+		// This will get used in AnglePIDOutput
 		prevOutput = output;
 	}
 
